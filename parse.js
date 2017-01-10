@@ -12,9 +12,11 @@ var TOKEN_END   = '%>';
 var MATCH_BLOCK = /^(\w+)?\s*((?:'(?:(?:\\')|[^'])*')|(?:"(?:(?:\\")|[^"])*"))?(?:\s+(.+))?$/;
 
 // parse pejs source into a source tree
-var parse = function(src) {
-	return Array.prototype.concat.apply([], src.split(TOKEN_END).map(function(slice) {
-		return slice.split(TOKEN_BEGIN);
+var parse = function(src, opts) {
+	var start_token = opts.start_token ? opts.start_token : TOKEN_BEGIN;
+	var end_token = opts.end_token ? opts.end_token : TOKEN_END;
+	return Array.prototype.concat.apply([], src.split(end_token).map(function(slice) {
+		return slice.split(start_token);
 	})).map(function(data, i) {
 		if (i % 2 === 0) return data && {type:STATIC, value:data};
 
